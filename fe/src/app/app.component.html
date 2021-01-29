@@ -8,6 +8,8 @@
       <!-- ngModel directive binds the value of HTML controls (input, select, textarea) to application data. -->
       <input class="form-control" id="search-text" aria-describedby="search-text" [(ngModel)]="searchText" placeholder="Enter text to search" autofocus>
 
+      <button (click)="getAllBooks()">Click here to get books.</button>
+
     </div>
 
     <ul class="list-group list-group-flush">
@@ -25,5 +27,12 @@
 
   <div class="rightpane">
     <h1>Test Page</h1>
+
+    <ul>
+      <li *ngFor="let book of books">
+        <span>{{book.author}}</span>
+      </li>
+    </ul>
+
   </div>
 </div>

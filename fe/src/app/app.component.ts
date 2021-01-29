@@ -10,11 +10,12 @@ export class AppComponent {
   
   public searchText: string = '';
   public programmingLanguages = ['Python','TypeScript','C','C++','Java', 'Go','JavaScript','PHP','Ruby','Swift','Kotlin']
+  public books: Array<any> = [];
 
   constructor(private http: HttpClient) { }
 
-  // helloWorld() {
-  //   return this.http.get<[]>('http://127.0.0.1:5000/').subscribe((res) => this.response = res)
-  // }
+  getAllBooks() {
+    return this.http.get<[]>('http://127.0.0.1:5000/api/v1/resources/books/all').subscribe((books) => this.books = books)
+  }
 
 }
