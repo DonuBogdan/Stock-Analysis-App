@@ -2,6 +2,21 @@
 
   <div class="leftpane">
     <h1>Test Page</h1>
+
+    <div class="form-group">
+      <label for="search-text">Search Text</label>
+      <!-- ngModel directive binds the value of HTML controls (input, select, textarea) to application data. -->
+      <input class="form-control" id="search-text" aria-describedby="search-text" [(ngModel)]="searchText" placeholder="Enter text to search" autofocus>
+
+    </div>
+
+    <ul class="list-group list-group-flush">
+      <!-- results of ngFor is passed to appFilter with argument searchText -->
+      <li class="list-group-item" *ngFor="let programmingLanguage of programmingLanguages | appFilter: searchText">
+        {{programmingLanguage}}
+      </li>
+    </ul>
+
   </div>
 
   <div class="middlepane">

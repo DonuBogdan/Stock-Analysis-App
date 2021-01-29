@@ -8,13 +8,13 @@ import { HttpClient } from '@angular/common/http';
 })
 export class AppComponent {
   
-  listOfItems = [1, 2, 3, 4, 5]
-  response = []
+  public searchText: string = '';
+  public programmingLanguages = ['Python','TypeScript','C','C++','Java', 'Go','JavaScript','PHP','Ruby','Swift','Kotlin']
 
   constructor(private http: HttpClient) { }
 
-  helloWorld() {
-    return this.http.get<[]>('http://127.0.0.1:5000/').subscribe((res) => this.response = res)
-  }
+  // helloWorld() {
+  //   return this.http.get<[]>('http://127.0.0.1:5000/').subscribe((res) => this.response = res)
+  // }
 
 }
