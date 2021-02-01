@@ -6,11 +6,13 @@
     <div class="form-group">
       <label for="search-text">Search Text</label>
       <!-- ngModel directive binds the value of HTML controls (input, select, textarea) to application data. -->
-      <input class="form-control" id="search-text" aria-describedby="search-text" [(ngModel)]="searchText" placeholder="Enter text to search" autofocus>
+      <input class="form-control" id="search-text" aria-describedby="search-text" (ngModelChange)="getTweets($event)" [(ngModel)]="searchText" placeholder="Enter text to search" autofocus>
 
       <button (click)="getAllBooks()">Click here to get books.</button>
 
     </div>
+
+    <!-- <button (click)="getTweets()">Press here to get tweets.</button> -->
 
     <ul class="list-group list-group-flush">
       <!-- results of ngFor is passed to appFilter with argument searchText -->
@@ -23,10 +25,30 @@
 
   <div class="middlepane">
     <h1>Test Page</h1>
+
+    <div>
+      <div style="display: block">
+        <canvas baseChart
+                [datasets]="barChartData"
+                [labels]="barChartLabels"
+                [options]="barChartOptions"
+                [legend]="barChartLegend"
+                [chartType]="barChartType">
+        </canvas>
+      </div>
+    </div>
+
+
   </div>
 
   <div class="rightpane">
     <h1>Test Page</h1>
+
+    <ul [hidden]="!tweetsAvailable">
+      <li *ngFor="let tweet of filteredTweets">
+        {{tweet}}
+      </li>
+    </ul>
 
     <ul>
       <li *ngFor="let book of books">
