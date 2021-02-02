@@ -1,6 +1,6 @@
 import flask 
 
-from flask import request
+from flask import request, jsonify
 from flask_cors import CORS
 
 from get_stocks import get_stocks_infos
@@ -13,17 +13,19 @@ CORS(app, support_credentials = True)
 @app.route('/api/v1/resources/stocks', methods = ['GET'])
 def get_stocks():
 
-    company_name = request.args['companyName']
+    response = None
 
-    df_stocks_infos = get_stocks_infos(company_name)
+    try:
+        company_name = request.args['companyName']
 
-    # avoid some problems regarding the index
-    df_stocks_infos.index = df_stocks_infos.index.strftime('%Y-%m-%d')
+        df_stocks_infos = get_stocks_infos(company_name)
 
-    # jsonify the df
-    df_response = df_stocks_infos.to_json(orient = 'index')
+        response = {'date': list(df_stocks_infos.index.strftime('%Y-%m-%d')), 'close': list(df_stocks_infos['Close'])}
 
-    return df_response
+    except:
+        response = {'error': 'Server error.'}
+
+    return jsonify(response)
 
 if __name__ == '__main__':
     app.run()

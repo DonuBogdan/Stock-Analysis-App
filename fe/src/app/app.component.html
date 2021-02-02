@@ -6,9 +6,9 @@
     <div class="form-group">
       <label for="search-text">Search Text</label>
       <!-- ngModel directive binds the value of HTML controls (input, select, textarea) to application data. -->
-      <input class="form-control" id="search-text" aria-describedby="search-text" (ngModelChange)="getTweets($event)" [(ngModel)]="searchText" placeholder="Enter text to search" autofocus>
+      <input class="form-control" id="search-text" aria-describedby="search-text" (ngModelChange)="getStocksInfos($event)" [(ngModel)]="searchText" placeholder="Enter text to search" autofocus>
 
-      <button (click)="getStocksInfos()">Click here to get stocks.</button>
+      <!-- <button (click)="getStocksInfos()">Click here to get stocks.</button> -->
 
     </div>
 
