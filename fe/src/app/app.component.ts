@@ -1,7 +1,8 @@
 // https://www.positronx.io/angular-chart-js-tutorial-with-ng2-charts-examples/
 import { Component } from '@angular/core';
 import { HttpClient } from '@angular/common/http';
-import { ChartType } from 'chart.js';
+import { ChartDataSets, ChartType } from 'chart.js';
+import { Color, Label } from 'ng2-charts';
 
 @Component({
   selector: 'app-root',
@@ -12,32 +13,40 @@ export class AppComponent {
   
   public searchText: string = '';
   public programmingLanguages = ['Python','TypeScript','C','C++','Java', 'Go','JavaScript','PHP','Ruby','Swift','Kotlin']
-  public books: Array<any> = [];
   public tweets: Array<any> = ['Ce mai faciiiiiiiiiiiii?', 'Ce faci?', 'Sunt bine, tu ce faci?', 'Uite bine, tu?', 'Nu stiu !', 'Samsung', 'Apple', 'Apple 2'];
   public filteredTweets: Array<any> = [];
   public tweetsAvailable: boolean = false;
 
 
-  public barChartData = [
-    {data: [65, 59, 80, 81, 56, 55, 40], label: 'Series A'},
-    {data: [28, 48, 40, 19, 86, 27, 90], label: 'Series B'}
+  lineChartData: ChartDataSets[] = [
+    { data: [85, 72, 78, 75, 77, 75], label: 'Crude oil prices' },
   ];
-  public barChartLabels = ['2006', '2007', '2008', '2009', '2010', '2011', '2012'];
-  public barChartOptions = {
-    scaleShowVerticalLines: false,
-    responsive: true
+
+  lineChartLabels: Label[] = ['January', 'February', 'March', 'April', 'May', 'June'];
+
+  lineChartOptions = {
+    responsive: true,
   };
-  public barChartLegend = true;
-  public barChartType: ChartType = 'bar';
-  
 
+  lineChartColors: Color[] = [
+    {
+      borderColor: 'black',
+      backgroundColor: 'rgba(255, 0, 0, 0.2)',
+    },
+  ];
 
+  lineChartLegend = true;
+  lineChartPlugins = [];
+  lineChartType: ChartType = 'line';
 
 
   constructor(private http: HttpClient) { }
 
-  getAllBooks() {
-    return this.http.get<[]>('http://127.0.0.1:5000/api/v1/resources/books/all').subscribe((books) => this.books = books)
+
+
+  getStocksInfos() {
+    console.log('Merge');
+    return this.http.get('http://127.0.0.1:5000/api/v1/resources/stocks', {params: {companyName: 'AAPL'}}).subscribe((stocks) => console.log(stocks))
   }
 
   getTweets(searchText: string) {
