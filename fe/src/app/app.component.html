@@ -1,4 +1,4 @@
-<div class="container">
+<div class="wrapper">
 
   <div class="leftpane">
     <h1>Test Page</h1>
@@ -14,9 +14,9 @@
 
     <!-- <button (click)="getTweets()">Press here to get tweets.</button> -->
 
-    <ul class="list-group list-group-flush">
+    <ul>
       <!-- results of ngFor is passed to appFilter with argument searchText -->
-      <li class="list-group-item" *ngFor="let programmingLanguage of programmingLanguages | appFilter: searchText">
+      <li *ngFor="let programmingLanguage of programmingLanguages | appFilter: searchText">
         {{programmingLanguage}}
       </li>
     </ul>
