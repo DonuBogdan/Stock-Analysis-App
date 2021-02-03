@@ -5,6 +5,7 @@ import { ChartDataSets, ChartType } from 'chart.js';
 import { Color, Label } from 'ng2-charts';
 import { ThrowStmt } from '@angular/compiler';
 import { StocksJson } from './core/models/stocks';
+import { TweetsJson } from './core/models/tweets';
 
 @Component({
   selector: 'app-root',
@@ -15,7 +16,7 @@ export class AppComponent implements OnInit {
   
   public searchText: string = '';
   public programmingLanguages = ['Python','TypeScript','C','C++','Java', 'Go','JavaScript','PHP','Ruby','Swift','Kotlin']
-  public tweets: Array<any> = ['Samsung', 'Apple', 'Apple 2', 'AAPL'];
+  public tweets: Array<any> = [];
   public filteredTweets: Array<any> = [];
   public tweetsAvailable: boolean = false;
 
@@ -64,6 +65,8 @@ export class AppComponent implements OnInit {
     return this.http.get('http://127.0.0.1:5000/api/v1/resources/stocks', {params: {companyName: searchText}}).subscribe((res: StocksJson) => {
       console.log(res['close'])
       console.log(res['date'])
+      console.log(res['currency'])
+      console.log(res['full_name'])
 
       this.lineChartData = [
         { data: res['close'], label: 'Stock prices'},
@@ -74,15 +77,16 @@ export class AppComponent implements OnInit {
 
   getTweets(searchText: string) {
     // console.log(searchText)
-    if (searchText == '') {
-      console.log('Nothing to display.')
-      this.tweetsAvailable = false;
+
+    // get tweets
+    return this.http.get('http://127.0.0.1:5000/api/v1/resources/tweets', {params: {companyName: searchText}}).subscribe((res: TweetsJson) => {
+
+      console.log(res['tweets']);
+
+      // this.tweets = res;
+      this.tweetsAvailable = true;    
+    })
+ 
     }
-    else {
-      // get tweets
-      this.filteredTweets = this.tweets.filter(tweet => tweet.toLocaleLowerCase() == searchText.toLocaleLowerCase())
-      this.tweetsAvailable = true;      
-    }
-  }
 
 }
