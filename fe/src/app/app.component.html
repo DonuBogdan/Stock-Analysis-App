@@ -1,32 +1,33 @@
+<app-header></app-header>
+
 <div class="wrapper">
 
   <div class="leftpane">
-    <h1>Test Page</h1>
+    <h1 [ngStyle]="{'padding':'5px'}">Search</h1>
 
-    <div class="form-group">
-      <label for="search-text">Search Text</label>
-      <!-- ngModel directive binds the value of HTML controls (input, select, textarea) to application data. -->
-      <input class="form-control" id="search-text" aria-describedby="search-text" (ngModelChange)="getStocksInfos($event)" (ngModelChange)="getTweets($event)" [(ngModel)]="searchText" placeholder="Enter text to search" autofocus>
-
-      <!-- <button (click)="getStocksInfos()">Click here to get stocks.</button> -->
-
+    <div class="form-group" [ngStyle]="{'padding': '5px'}">
+      <label for="search-text"><b>Search Text</b></label>
+      <input class="form-control" id="search-text" aria-describedby="search-text" (keyup)="getSymbols()" [(ngModel)]="searchText" placeholder="Enter text to search" autofocus>
     </div>
 
-    <!-- <button (click)="getTweets()">Press here to get tweets.</button> -->
+    <hr [ngStyle]="{'background-color':'white'}">
 
-    <ul>
-      <!-- results of ngFor is passed to appFilter with argument searchText -->
-      <li *ngFor="let programmingLanguage of programmingLanguages | appFilter: searchText">
-        {{programmingLanguage}}
-      </li>
-    </ul>
+    <div [ngStyle]="{'padding': '5px'}"><b>SYMBOLS</b></div>
+
+    <div [ngStyle]="{'height': '65%', 'overflow-y': 'auto'}">
+      <div [ngStyle]="{'background-color': '#a8adaa', 'color': '#000000', 'padding': '10px', 'opacity': '0.25', 'margin': '5px', 'cursor': 'pointer'}" *ngFor="let companyInfo of companyInfos" (click)="getData(companyInfo.symbol)">
+        {{companyInfo.symbol}} ({{companyInfo.name}})
+      </div>
+    </div>
 
   </div>
 
   <div class="middlepane">
-    <h1>Test Page</h1>
+    <h1 [ngStyle]="{'padding':'5px'}">Graphs</h1>
 
-    <div class="chart-wrapper">
+    <div></div>
+
+    <div [hidden]="!dataAvailable" class="chart-wrapper">
       <canvas baseChart 
           [datasets]="lineChartData" 
           [labels]="lineChartLabels" 
@@ -41,10 +42,10 @@
   </div>
 
   <div class="rightpane">
-    <h1>Test Page</h1>
+    <h1 [ngStyle]="{'padding':'5px'}">Tweets</h1>
 
-    <ul [hidden]="!tweetsAvailable">
-      <li *ngFor="let tweet of filteredTweets">
+    <ul [hidden]="!dataAvailable">
+      <li *ngFor="let tweet of tweets">
         {{tweet}}
       </li>
     </ul>

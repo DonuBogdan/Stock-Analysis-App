@@ -1,11 +1,8 @@
 // https://www.positronx.io/angular-chart-js-tutorial-with-ng2-charts-examples/
-import { Component, OnInit,  OnChanges } from '@angular/core';
+import { Component, OnInit } from '@angular/core';
 import { HttpClient } from '@angular/common/http';
-import { ChartDataSets, ChartType } from 'chart.js';
-import { Color, Label } from 'ng2-charts';
-import { ThrowStmt } from '@angular/compiler';
-import { StocksJson } from './core/models/stocks';
-import { TweetsJson } from './core/models/tweets';
+import { StocksJson } from './shared/models/stocks';
+import { TweetsJson } from './shared/models/tweets';
 
 @Component({
   selector: 'app-root',
@@ -15,10 +12,11 @@ import { TweetsJson } from './core/models/tweets';
 export class AppComponent implements OnInit {
   
   public searchText: string = '';
-  public programmingLanguages = ['Python','TypeScript','C','C++','Java', 'Go','JavaScript','PHP','Ruby','Swift','Kotlin']
   public tweets: Array<any> = [];
-  public filteredTweets: Array<any> = [];
-  public tweetsAvailable: boolean = false;
+  public dataAvailable: boolean = false;
+
+  public companyInfos: Array<any> = [];
+  public selectedSymbol = '';
 
   lineChartData: any;
   lineChartLabels: any;
@@ -32,11 +30,9 @@ export class AppComponent implements OnInit {
 
   ngOnInit() {
 
-    this.lineChartData = [
-      { data: [85, 72, 78, 75, 77, 75], label: 'Crude oil prices' },
-    ];
-  
-    this.lineChartLabels = ['January', 'February', 'March', 'April', 'May', 'June'];
+    this.lineChartData = [];
+
+    this.lineChartLabels = [];
   
     this.lineChartOptions = {
       responsive: true,
@@ -45,7 +41,7 @@ export class AppComponent implements OnInit {
     this.lineChartColors = [
       {
         borderColor: 'black',
-        backgroundColor: 'rgba(255, 0, 0, 0.2)',
+        backgroundColor: 'rgba(0, 100, 0, 0.25)',
       },
     ];
   
@@ -55,38 +51,52 @@ export class AppComponent implements OnInit {
 
   }
 
-  // ngOnChanges() {
-  //   console.log('ABC')
-  //   console.log(this.stocks)
-  // }
+  getSymbols() {
+    if (this.searchText != '') {
+      this.http.get('http://127.0.0.1:5000/api/v1/resources/symbols', {params: {searchText: this.searchText}}).subscribe((res: any) => {
+        this.companyInfos = res;
 
-  getStocksInfos(searchText: string) {
-    console.log(searchText)
-    return this.http.get('http://127.0.0.1:5000/api/v1/resources/stocks', {params: {companyName: searchText}}).subscribe((res: StocksJson) => {
-      console.log(res['close'])
-      console.log(res['date'])
-      console.log(res['currency'])
-      console.log(res['full_name'])
+        // console.log(this.companyInfos)
+      })
+    } else {
 
-      this.lineChartData = [
-        { data: res['close'], label: 'Stock prices'},
-      ]
-      this.lineChartLabels = res['date']
-    })
+      this.dataAvailable = false;
+
+      this.companyInfos = [];
+      this.companyInfos = [];
+
+      this.tweets = [];
+
+      this.lineChartData = [];
+      this.lineChartLabels = [];
+
+    }
   }
 
-  getTweets(searchText: string) {
-    // console.log(searchText)
+  getData(symbol: any) {
+
+    this.selectedSymbol = symbol;
+    this.dataAvailable = false;
 
     // get tweets
-    return this.http.get('http://127.0.0.1:5000/api/v1/resources/tweets', {params: {companyName: searchText}}).subscribe((res: TweetsJson) => {
+    this.http.get('http://127.0.0.1:5000/api/v1/resources/tweets', {params: {companyName: symbol}}).subscribe((res: TweetsJson) => {
+    
+      this.tweets = res['tweets'];
+    });
 
-      console.log(res['tweets']);
+    this.http.get('http://127.0.0.1:5000/api/v1/resources/stocks', {params: {companyName: symbol}}).subscribe((res: StocksJson) => {
 
-      // this.tweets = res;
-      this.tweetsAvailable = true;    
-    })
- 
-    }
+      this.lineChartData = [
+
+        { data: res['close'], label: 'Stock prices'},
+      ]
+
+      this.lineChartLabels = res['date']
+
+      this.dataAvailable = true;
+
+    });
+    
+  }
 
 }

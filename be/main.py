@@ -3,13 +3,35 @@ import flask
 from flask import request, jsonify
 from flask_cors import CORS
 
-from stocks import get_stocks_infos
+from stocks import get_stocks_infos, get_all_matched_symbols
 from tweets import get_tweets_text
 
 
 app = flask.Flask(__name__)
 app.config['DEBUG'] = True
 CORS(app, support_credentials = True)
+
+
+@app.route('/api/v1/resources/symbols', methods = ['GET'])
+def get_symbols():
+
+    response = None
+
+    try:
+
+        search_text = request.args['searchText']
+
+        df = get_all_matched_symbols(search_text)
+
+        response = []
+
+        for idx, row in df.iterrows():
+            response.append({'symbol': row['Symbol'], 'name': row['Name']})
+
+    except: 
+        response = {'error': 'Server error.'}
+
+    return jsonify(response)
 
 @app.route('/api/v1/resources/stocks', methods = ['GET'])
 def get_stocks():
