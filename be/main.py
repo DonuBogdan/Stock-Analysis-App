@@ -41,9 +41,9 @@ def get_stocks():
     try:
         company_name = request.args['companyName']
 
-        df_stocks_infos, currency, full_name = get_stocks_infos(company_name)
+        df_stocks_infos, currency, full_name, business_summary = get_stocks_infos(company_name)
 
-        response = {'date': list(df_stocks_infos.index.strftime('%Y-%m-%d')), 'close': list(df_stocks_infos['Close']), 'currency': currency, 'full_name': full_name}
+        response = {'date': list(df_stocks_infos.index.strftime('%Y-%m-%d')), 'close': list(df_stocks_infos['Close']), 'currency': currency, 'full_name': full_name, 'business_summary': business_summary}
 
     except:
         response = {'error': 'Server error.'}

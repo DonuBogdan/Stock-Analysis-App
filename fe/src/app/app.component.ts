@@ -14,9 +14,12 @@ export class AppComponent implements OnInit {
   public searchText: string = '';
   public tweets: Array<any> = [];
   public dataAvailable: boolean = false;
+  public showCompanyDetails: boolean = false;
 
   public companyInfos: Array<any> = [];
   public selectedSymbol = '';
+  public selectedCompanyName = '';
+  public selectedCompanySummary = '';
 
   lineChartData: any;
   lineChartLabels: any;
@@ -61,8 +64,8 @@ export class AppComponent implements OnInit {
     } else {
 
       this.dataAvailable = false;
+      this.showCompanyDetails = false;
 
-      this.companyInfos = [];
       this.companyInfos = [];
 
       this.tweets = [];
@@ -73,10 +76,13 @@ export class AppComponent implements OnInit {
     }
   }
 
-  getData(symbol: any) {
+  getData(symbol: any, name: any) {
 
     this.selectedSymbol = symbol;
+    this.selectedCompanyName = name;
+    
     this.dataAvailable = false;
+    this.showCompanyDetails = false;
 
     // get tweets
     this.http.get('http://127.0.0.1:5000/api/v1/resources/tweets', {params: {companyName: symbol}}).subscribe((res: TweetsJson) => {
@@ -91,12 +97,18 @@ export class AppComponent implements OnInit {
         { data: res['close'], label: 'Stock prices'},
       ]
 
-      this.lineChartLabels = res['date']
+      this.lineChartLabels = res['date'];
+
+      this.selectedCompanySummary = res['business_summary'];
 
       this.dataAvailable = true;
 
     });
     
+  }
+
+  unlockCompanyDetails() {
+    this.showCompanyDetails = !this.showCompanyDetails;
   }
 
 }

@@ -21,5 +21,6 @@ def get_stocks_infos(company_name):
     
     currency = company_infos.info['currency']
     full_name = company_infos.info['longName']
+    business_summary = company_infos.info['longBusinessSummary']
 
-    return history, currency, full_name
+    return history, currency, full_name, business_summary

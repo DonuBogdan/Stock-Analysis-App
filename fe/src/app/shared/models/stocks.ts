@@ -3,4 +3,5 @@ export interface StocksJson {
     date?: any;
     currency?: any;
     full_name?: any;
+    business_summary?: any;
 }
