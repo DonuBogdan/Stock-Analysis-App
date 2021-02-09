@@ -3,6 +3,8 @@ import { Component, OnInit } from '@angular/core';
 import { HttpClient } from '@angular/common/http';
 import { StocksJson } from './shared/models/stocks';
 import { TweetsJson } from './shared/models/tweets';
+import { TwitterService } from './core/services/twitter.service';
+import { YahooFinanceService } from './core/services/yahoo-finance.service';
 
 @Component({
   selector: 'app-root',
@@ -12,11 +14,13 @@ import { TweetsJson } from './shared/models/tweets';
 export class AppComponent implements OnInit {
   
   public searchText: string = '';
-  public tweets: Array<any> = [];
+ 
   public dataAvailable: boolean = false;
   public showCompanyDetails: boolean = false;
 
+  public tweets: Array<any> = [];
   public companyInfos: Array<any> = [];
+  
   public selectedSymbol = '';
   public selectedCompanyName = '';
   public selectedCompanySummary = '';
@@ -29,7 +33,9 @@ export class AppComponent implements OnInit {
   lineChartPlugins: any;
   lineChartType: any;
 
-  constructor(private http: HttpClient) { }
+  public p: number = 1;
+
+  constructor(private http: HttpClient, private twitterService: TwitterService, private yahooFinanceService: YahooFinanceService) { }
 
   ngOnInit() {
 
@@ -85,12 +91,12 @@ export class AppComponent implements OnInit {
     this.showCompanyDetails = false;
 
     // get tweets
-    this.http.get('http://127.0.0.1:5000/api/v1/resources/tweets', {params: {companyName: symbol}}).subscribe((res: TweetsJson) => {
-    
+    this.twitterService.getTweets(symbol).subscribe((res: TweetsJson) => {
       this.tweets = res['tweets'];
     });
 
-    this.http.get('http://127.0.0.1:5000/api/v1/resources/stocks', {params: {companyName: symbol}}).subscribe((res: StocksJson) => {
+    // get stocks infos
+    this.yahooFinanceService.getStocksInfos(symbol).subscribe((res: StocksJson) => {
 
       this.lineChartData = [
 

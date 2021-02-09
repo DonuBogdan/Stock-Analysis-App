@@ -8,7 +8,7 @@ def get_tweets_text(search_word):
     # credentials
     consumer_key = ''
     consumer_secret = ''
-    access_token = ''
+    access_token = '-'
     access_token_secret = ''
 
     auth = tweepy.OAuthHandler(consumer_key, consumer_secret)
@@ -16,7 +16,7 @@ def get_tweets_text(search_word):
     api = tweepy.API(auth, wait_on_rate_limit = True)
 
     # get the tweets
-    tweets = tweepy.Cursor(api.search, q = search_word, lang = 'en').items(5)
+    tweets = tweepy.Cursor(api.search, q = search_word, lang = 'en').items(20)
 
     list_of_tweets = [tweet.text for tweet in tweets]
 
