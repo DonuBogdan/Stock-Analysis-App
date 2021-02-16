@@ -4,41 +4,42 @@
 
   <div class="leftpane">
 
-    <div [ngStyle]="{'height': '22.5%'}">
+    <div [ngStyle]="{'height': '17.5%'}">
 
-      <div [ngStyle]="{'padding-top':'15px', 'padding-right': '5px', 'padding-bottom': '5px', 'padding-left': '5px', 'font-size': '26px'}">Search</div>
+      <div>Search</div>
 
-      <div class="form-group" [ngStyle]="{'padding': '5px'}">
-        <label for="search-text">Search Text</label>
-        <input class="form-control" id="search-text" aria-describedby="search-text" (keyup)="getSymbols()" [(ngModel)]="searchText" placeholder="Enter text to search" autofocus>
+      <div class="form-group" [ngStyle]="{'padding': '0px'}">
+        <input class="form-control" [ngStyle]="{'margin-top': '10px'}" aria-describedby="search-text" (keyup)="getCompanies()" 
+        [(ngModel)]="searchText" placeholder="Enter text to search" autofocus>
       </div>
 
       <hr [ngStyle]="{'background-color':'white'}">
 
-      <div [ngStyle]="{'padding': '5px'}">SYMBOLS</div>
+      <div>SYMBOLS</div>
 
   </div>
 
-    <div [ngStyle]="{'height': '77.5%', 'overflow-y': 'auto'}">
-      <div [ngStyle]="{'border-radius': '5px', 'background-color': '#a8adaa', 'color': '#000000', 'padding': '10px', 'opacity': '0.25', 'margin': '5px', 'cursor': 'pointer'}" *ngFor="let companyInfo of companyInfos" (click)="getData(companyInfo.symbol, companyInfo.name)">
-        {{companyInfo.symbol}} ({{companyInfo.name}})
+    <div [ngStyle]="{'height': '82.5%', 'overflow-y': 'auto'}">
+      <div class="list-of-companies" *ngFor="let company of companies" (click)="getData(company.symbol)">
+        {{company.symbol}} ({{company.name}})
       </div>
     </div>
 
   </div>
 
   <div class="middlepane">
-    <div [ngStyle]="{'height': '5%', 'padding': '10px'}">Graphs</div>
 
-    <div [ngStyle]="{'overflow-y': 'auto', 'overflow-x': 'hidden', 'height': '95%'}">
+    <div [ngStyle]="{'height': '4%'}">Graphs</div>
 
-      <button [hidden]="!dataAvailable" mat-mini-fab class="btn-company-info" (click)="unlockCompanyDetails()">
-        <mat-icon>add</mat-icon>
+    <div class="infos-about-company">
+
+      <button mat-mini-fab class="btn-company-info" [hidden]="!dataAvailable" (click)="unlockCompanyDetails()">
+        +
       </button>
   
-      <div [hidden]="!showCompanyDetails" [ngStyle]="{'padding-left': '15px'}">{{this.selectedCompanySummary}}</div>
+      <div [hidden]="!showCompanyDetails" [ngStyle]="{'margin-top': '10px'}">{{this.selectedCompanyDetails}}</div>
   
-      <div [hidden]="!dataAvailable" class="chart-wrapper" [ngStyle]="{'margin': '5px'}">
+      <div class="chart-wrapper" [hidden]="!dataAvailable" [ngStyle]="{'margin-top': '10px'}">
         <canvas baseChart 
             [datasets]="lineChartData" 
             [labels]="lineChartLabels" 
@@ -51,13 +52,13 @@
       </div>
     </div>
 
-
   </div>
 
   <div class="rightpane">
-    <div [ngStyle]="{'height': '5%', 'padding': '10px'}">Tweets</div>
 
-    <div class="text-center" [hidden]="!dataAvailable" [ngStyle]="{'padding-top': '15px', 'padding-right': '15px', 'padding-left': '15px', 'height': '95%', 'overflow': 'auto'}">
+    <div [ngStyle]="{'height': '4%'}">Tweets</div>
+
+    <div class="list-of-tweets" [hidden]="!dataAvailable">
     
       <div *ngFor="let tweet of tweets | paginate: { itemsPerPage: 10, currentPage: p }">
         {{tweet}}
@@ -65,10 +66,9 @@
       </div>
 
       <pagination-controls (pageChange)="p = $event"></pagination-controls>
-    
+
     </div>
 
-  
-
   </div>
+
 </div>
