@@ -10,6 +10,24 @@ import { NasdaqService } from './core/services/nasdaq.service';
   styleUrls: ['./app.component.css']
 })
 export class AppComponent implements OnInit {
+
+  view: [number, number] = [700, 500];
+  data: any[] = [];
+  
+  // options
+  showLabels: boolean = true;
+  animations: boolean = true;
+  xAxis: boolean = true;
+  yAxis: boolean = true;
+  showYAxisLabel: boolean = true;
+  showXAxisLabel: boolean = true;
+  xAxisLabel: string = 'Date';
+  yAxisLabel: string = 'Price';
+  timeline: boolean = true;
+
+  colorScheme = {
+    domain: ['#006400', '#2199e8']
+  };
   
   public searchText: string = '';
  
@@ -21,39 +39,12 @@ export class AppComponent implements OnInit {
   
   public selectedCompanyDetails = '';
 
-  lineChartData: any;
-  lineChartLabels: any;
-  lineChartOptions: any;
-  lineChartColors: any;
-  lineChartLegend: any;
-  lineChartPlugins: any;
-  lineChartType: any;
-
   public p: number = 1;
 
-  constructor(private twitterService: TwitterService, private yahooFinanceService: YahooFinanceService, private nasdaqService: NasdaqService) { }
+  constructor(private twitterService: TwitterService, private yahooFinanceService: YahooFinanceService, private nasdaqService: NasdaqService) { 
+  }
 
   ngOnInit() {
-
-    this.lineChartData = [];
-
-    this.lineChartLabels = [];
-  
-    this.lineChartOptions = {
-      responsive: true,
-    };
-  
-    this.lineChartColors = [
-      {
-        borderColor: 'black',
-        backgroundColor: 'rgba(0, 100, 0, 0.25)',
-      },
-    ];
-  
-    this.lineChartLegend = true;
-    this.lineChartPlugins = [];
-    this.lineChartType = 'line';
-
   }
 
   getCompanies() {
@@ -69,9 +60,6 @@ export class AppComponent implements OnInit {
 
       this.companies = [];
       this.tweets = [];
-
-      this.lineChartData = [];
-      this.lineChartLabels = [];
 
     }
   }
@@ -91,14 +79,18 @@ export class AppComponent implements OnInit {
     // get stocks infos
     this.yahooFinanceService.getStocksInfos(symbol).subscribe((res: any) => {
 
-      this.lineChartData = [
+      this.data = [
+        {
+          'name': 'Real data',
+          'series': res[0].slice(0, res[0].length - 1)
+        },
+        {
+            'name': 'Predicted data',
+            'series': res[0].slice(res[0].length - 2, res[0].length)
+        }
+      ];
 
-        { data: res['close'], label: 'Stock prices'},
-      ]
-
-      this.lineChartLabels = res['date'];
-
-      this.selectedCompanyDetails = res['business_summary'];
+      this.selectedCompanyDetails = res[1];
 
       this.dataAvailable = true;
 

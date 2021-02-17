@@ -3,7 +3,7 @@ import flask
 from flask import request, jsonify
 from flask_cors import CORS
 
-from stocks import get_stocks_infos, get_all_matched_symbols
+from stocks import get_stocks_infos, get_all_matched_symbols, predict_next_day
 from tweets import get_tweets_text
 
 
@@ -39,11 +39,19 @@ def get_stocks():
     response = None
 
     try:
-        company_name = request.args['companyName']
+        company_symbol = request.args['companyName']
 
-        df_stocks_infos, currency, full_name, business_summary = get_stocks_infos(company_name)
+        df_stocks_infos, currency, full_name, business_summary = get_stocks_infos(company_symbol)
 
-        response = {'date': list(df_stocks_infos.index.strftime('%Y-%m-%d')), 'close': list(df_stocks_infos['Close']), 'currency': currency, 'full_name': full_name, 'business_summary': business_summary}
+        list_dates = list(df_stocks_infos.index.strftime('%Y-%m-%d'))
+        list_closing_prices = list(df_stocks_infos['Close'])
+
+        predicted_price, prediction_date = predict_next_day(company_symbol)
+
+        list_dates.append(prediction_date)
+        list_closing_prices.append(predicted_price)
+
+        response = {'date': list_dates, 'close': list_closing_prices, 'currency': currency, 'full_name': full_name, 'business_summary': business_summary}
 
     except:
         response = {'error': 'Server error.'}

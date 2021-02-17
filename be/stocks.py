@@ -1,3 +1,4 @@
+import stocker
 import pandas as pd
 import yfinance as yf
 
@@ -24,3 +25,9 @@ def get_stocks_infos(company_name):
     business_summary = company_infos.info['longBusinessSummary']
 
     return history, currency, full_name, business_summary
+
+def predict_next_day(symbol):
+    
+    result = stocker.predict.tomorrow(symbol)
+
+    return result[0], result[2]

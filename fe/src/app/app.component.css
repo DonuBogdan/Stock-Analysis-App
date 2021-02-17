@@ -48,6 +48,12 @@
     overflow-x: hidden;
 }
 
+.chart-container {
+    display: flex;
+    justify-content: center;
+    margin-top: 10px;
+}
+
 .rightpane {
   width: 30%;
   height: 100%;
