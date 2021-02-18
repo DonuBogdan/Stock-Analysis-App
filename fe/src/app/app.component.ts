@@ -22,7 +22,7 @@ export class AppComponent implements OnInit {
   showYAxisLabel: boolean = true;
   showXAxisLabel: boolean = true;
   xAxisLabel: string = 'Date';
-  yAxisLabel: string = 'Price';
+  yAxisLabel: string = '';
   timeline: boolean = true;
 
   colorScheme = {
@@ -89,6 +89,8 @@ export class AppComponent implements OnInit {
             'series': res[0].slice(res[0].length - 2, res[0].length)
         }
       ];
+
+      this.yAxisLabel = 'Price' + ' (' + res[2] + ')';
 
       this.selectedCompanyDetails = res[1];
 
