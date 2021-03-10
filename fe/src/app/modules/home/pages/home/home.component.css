@@ -1,0 +1,71 @@
+.wrapper {
+    width: 100%;
+    height: 90%;
+    color: white;
+}
+
+.leftpane {
+    width: 20%;
+    height: 100%;
+    float: left;
+    padding: 15px;
+    border-collapse: collapse;
+}
+
+.list-of-companies {
+    margin-bottom: 5px;
+    padding: 10px;
+    border-radius: 5px;
+    background-color: #a8adaa;
+    color: #000000;
+    opacity: 0.25;
+    cursor: pointer;
+}
+
+.middlepane {
+    width: 50%;
+    height: 100%;
+    float: left;
+    padding: 15px;
+    border-radius: 10px;
+    background-color: #333333;
+    border-collapse: collapse;
+}
+
+.btn-company-info {
+    display: flex;
+    width: 28px;
+    height: 28px;
+    font-size: 20px;
+    background-color: #006400;
+    align-items: center;
+    justify-content: center;
+}
+
+.infos-about-company {
+    height: 96%;
+    overflow-y: auto;
+    overflow-x: hidden;
+}
+
+.chart-container {
+    display: flex;
+    justify-content: center;
+    margin-top: 10px;
+}
+
+.rightpane {
+  width: 30%;
+  height: 100%;
+  float: right;
+  padding: 15px;
+  border-radius: 10px;
+  background-color: #262626;
+  border-collapse: collapse;
+}
+
+.list-of-tweets {    
+    height: 96%;
+    overflow: auto;
+    text-align: center;
+}

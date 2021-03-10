@@ -1,0 +1,82 @@
+<app-header></app-header>
+
+<div class="wrapper">
+
+  <div class="leftpane">
+
+    <div [ngStyle]="{'height': '17.5%'}">
+
+      <div>Search</div>
+
+      <div class="form-group" [ngStyle]="{'padding': '0px'}">
+        <input class="form-control" [ngStyle]="{'margin-top': '10px'}" aria-describedby="search-text" (keyup)="getCompanies()" 
+        [(ngModel)]="searchText" placeholder="Enter text to search" autofocus>
+      </div>
+
+      <hr [ngStyle]="{'background-color':'white'}">
+
+      <div>SYMBOLS</div>
+
+  </div>
+
+    <div [ngStyle]="{'height': '82.5%', 'overflow-y': 'auto'}">
+      <div class="list-of-companies" *ngFor="let company of companies" (click)="getData(company.symbol)">
+        {{company.symbol}} ({{company.name}})
+      </div>
+    </div>
+
+  </div>
+
+  <div class="middlepane">
+
+    <div [ngStyle]="{'height': '4%'}">Graphs</div>
+
+    <div class="infos-about-company">
+
+      <button mat-mini-fab class="btn-company-info" [hidden]="!dataAvailable" (click)="unlockCompanyDetails()">
+        <div [hidden]="showCompanyDetails">+</div>
+        <div [hidden]="!showCompanyDetails">-</div>
+      </button>
+  
+      <div [hidden]="!showCompanyDetails" [ngStyle]="{'margin-top': '10px'}">{{this.selectedCompanyDetails}}</div>
+  
+      <div class="chart-container" [hidden]="!dataAvailable">
+
+        <ngx-charts-area-chart
+          [view]="view"
+          [scheme]="colorScheme"
+          [showXAxisLabel]="showXAxisLabel"
+          [showYAxisLabel]="showYAxisLabel"
+          [xAxis]="xAxis"
+          [yAxis]="yAxis"
+          [xAxisLabel]="xAxisLabel"
+          [yAxisLabel]="yAxisLabel"
+          [timeline]="timeline"
+          [results]="data"
+        >
+        </ngx-charts-area-chart>
+        
+      </div>
+
+    </div>
+
+  </div>
+
+  <div class="rightpane">
+
+    <div [ngStyle]="{'height': '4%'}">Tweets</div>
+
+    <div class="list-of-tweets" [hidden]="!dataAvailable">
+    
+      <div *ngFor="let tweet of tweets | paginate: { itemsPerPage: 10, currentPage: p }">
+        {{tweet}}
+        <hr [ngStyle]="{'background-color':'white'}">
+      </div>
+
+      <pagination-controls (pageChange)="p = $event"></pagination-controls>
+
+    </div>
+
+  </div>
+
+</div>

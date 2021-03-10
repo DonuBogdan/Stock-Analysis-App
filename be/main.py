@@ -11,6 +11,16 @@ app = flask.Flask(__name__)
 app.config['DEBUG'] = True
 CORS(app, support_credentials = True)
 
+# new
+
+# from flask_sqlalchemy import SQLAlchemy
+
+# app.config['SQLALCHEMY_DATABASE_URI'] = 'postgresql://postgres:postNegru123@@localhost:5432/stock_analysis_app_db'
+# db = SQLAlchemy(app)
+
+
+# end new
+
 
 @app.route('/api/v1/resources/symbols', methods = ['GET'])
 def get_symbols():
