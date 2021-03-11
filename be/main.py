@@ -46,6 +46,23 @@ def register():
    
         return jsonify({'response': status})
 
+@app.route('/api/v1/resources/login', methods = ['POST'])
+def login():
+    request_data = request.get_json()
+            
+    username = request_data['username']
+    password = request_data['password']
+
+    user = User.query.filter_by(username = username).first()
+
+    if user and bcrypt.check_password_hash(user.password, password):
+        # session['logged_in'] = True
+        status = True
+    else:
+        status = False
+
+    return jsonify({'response': status})
+
 @app.route('/api/v1/resources/symbols', methods = ['GET'])
 def get_symbols():
 
