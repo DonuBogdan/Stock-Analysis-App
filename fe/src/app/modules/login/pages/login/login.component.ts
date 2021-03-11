@@ -35,7 +35,7 @@ export class LoginComponent implements OnInit {
 
     this.submitted = true;
 
-    console.log(this.loginForm.value);
+    // console.log(this.loginForm.value);
 
     // stop here if form is invalid
     if (this.loginForm.invalid) {
@@ -43,7 +43,7 @@ export class LoginComponent implements OnInit {
     }
 
     this.loginService.login(this.loginFormControls.username.value, this.loginFormControls.password.value).subscribe((res: any) => {
-      
+
       if (res['response'] == true) {
         console.log('Login successful');
         this.router.navigate(['/home']);
