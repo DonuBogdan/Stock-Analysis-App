@@ -1,6 +1,6 @@
 import { Component, OnInit } from '@angular/core';
 import { FormBuilder, Validators } from '@angular/forms';
-import { RegisterUserService } from '../../../../core/services/register-user.service';
+import { AccountService } from '../../../../core/services/account.service';
 import { Router } from '@angular/router';
 
 @Component({
@@ -15,7 +15,7 @@ export class RegisterComponent implements OnInit {
 
   constructor(
     private formBuilder: FormBuilder,
-    private registerUserService: RegisterUserService,
+    private accountService: AccountService,
     private router: Router
   ) { }
 
@@ -43,7 +43,7 @@ export class RegisterComponent implements OnInit {
       return;
     }
 
-    this.registerUserService.registerUser(this.registerForm.value).subscribe((res: any) => {
+    this.accountService.registerUser(this.registerForm.value).subscribe((res: any) => {
       console.log(res);
       console.log('Registration successful');
       this.router.navigate(['../login']);

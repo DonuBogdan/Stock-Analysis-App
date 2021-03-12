@@ -1,6 +1,6 @@
 import { Component, OnInit } from '@angular/core';
 import { FormBuilder, Validators } from '@angular/forms';
-import { LoginService } from '../../../../core/services/login.service';
+import { AccountService } from '../../../../core/services/account.service';
 import { Router } from '@angular/router';
 
 @Component({
@@ -15,7 +15,7 @@ export class LoginComponent implements OnInit {
 
   constructor(
     private formBuilder: FormBuilder,
-    private loginService: LoginService,
+    private accountService: AccountService,
     private router: Router,
   ) { }
 
@@ -42,7 +42,7 @@ export class LoginComponent implements OnInit {
       return;
     }
 
-    this.loginService.login(this.loginFormControls.username.value, this.loginFormControls.password.value).subscribe((res: any) => {
+    this.accountService.login(this.loginFormControls.username.value, this.loginFormControls.password.value).subscribe((res: any) => {
 
       if (res['response'] == true) {
         console.log('Login successful');

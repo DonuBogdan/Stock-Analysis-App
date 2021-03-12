@@ -1,6 +1,6 @@
 import { Injectable } from '@angular/core';
 import { Router, CanActivate } from '@angular/router';
-import { LoginService } from '../../core/services/login.service';
+import { AccountService } from '../../core/services/account.service';
 
 @Injectable({ 
     providedIn: 'root' 
@@ -8,14 +8,14 @@ import { LoginService } from '../../core/services/login.service';
 export class AuthGuard implements CanActivate {
     constructor(
         private router: Router,
-        private loginService: LoginService
+        private accountService: AccountService
     ) {}
 
     canActivate() {
 
-        console.log(this.loginService.userLoggedIn())
+        console.log(this.accountService.userLoggedIn())
 
-        if (this.loginService.userLoggedIn()) {
+        if (this.accountService.userLoggedIn()) {
             // authorized so return true
             return true;
         }
