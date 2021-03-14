@@ -1,28 +1,42 @@
 import { Injectable } from '@angular/core';
 import { Router, CanActivate } from '@angular/router';
+import { Observable } from 'rxjs';
 import { AccountService } from '../../core/services/account.service';
 
 @Injectable({ 
     providedIn: 'root' 
 })
 export class AuthGuard implements CanActivate {
+    
     constructor(
         private router: Router,
         private accountService: AccountService
     ) {}
 
-    canActivate() {
+    canActivate(): Observable<boolean> {
 
-        console.log(this.accountService.userLoggedIn())
+        return new Observable<boolean>(obs => {
 
-        if (this.accountService.userLoggedIn()) {
-            // authorized so return true
-            return true;
-        }
+            const token = localStorage.getItem('token'); 
 
-        // not logged in so redirect to login page
-        this.router.navigate(['/login']);
+            this.accountService.ensureAuthenticated(token).subscribe((res: any) => {
 
-        return false;
+                if (res['status'] == 'success') {
+                    console.log('true');
+                    obs.next(true);
+                } else {
+
+                    console.log('false');
+
+                    this.router.navigate(['/login']);
+
+                    obs.next(false);
+                }
+    
+            });
+
+        });
+
     }
+
 }

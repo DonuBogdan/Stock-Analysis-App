@@ -44,11 +44,13 @@ export class LoginComponent implements OnInit {
 
     this.accountService.login(this.loginFormControls.username.value, this.loginFormControls.password.value).subscribe((res: any) => {
 
-      if (res['response'] == true) {
-        console.log('Login successful');
+      console.log(res);
+
+      if (res['status'] == 'success') {
+        console.log('Login successful.');
         this.router.navigate(['/home']);
       } else {
-        console.log(res['response'])
+        console.log(res['message']);
       }
 
     });

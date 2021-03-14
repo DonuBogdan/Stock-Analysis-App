@@ -24,44 +24,136 @@ def register():
     if request.method == 'POST':
 
         request_data = request.get_json()
+        
+        # check if user already exists
+        user = User.query.filter_by(username = request_data['username']).first()
+
+        if not user:
+
+            try:
             
-        username = request_data['username']
-        first_name = request_data['firstName']
-        last_name = request_data['lastName']
-        email = request_data['email']
-        password = request_data['password']
-        hashed_password = bcrypt.generate_password_hash(password).decode('utf-8')
+                username = request_data['username']
+                first_name = request_data['firstName']
+                last_name = request_data['lastName']
+                email = request_data['email']
+                password = request_data['password']
+                hashed_password = bcrypt.generate_password_hash(password).decode('utf-8')
 
-        user = User(username = username, first_name = first_name, last_name = last_name, 
-                    email = email, password = hashed_password)
+                user = User(username = username, first_name = first_name, last_name = last_name, 
+                            email = email, password = hashed_password)
 
-        try:
-            db.session.add(user)
-            db.session.commit()
-            status = 'success'
-        except:
-            status = 'error'
+                # insert the user
+                db.session.add(user)
+                db.session.commit()
 
-        db.session.close()
-   
-        return jsonify({'response': status})
+                response_obj = {
+                    'status': 'success',
+                    'message': 'Successfully registered.'
+                }
+
+                return jsonify(response_obj)
+
+            except Exception as e:
+                response_obj = {
+                    'status': 'fail',
+                    'message': 'Some error occurred. Please try again.'
+                }
+
+                return jsonify(response_obj)
+        else:
+            response_obj = {
+                'status': 'fail',
+                'message': 'User already exists. Please Log in.',
+            }
+
+            return jsonify(response_obj)
 
 @app.route('/api/v1/resources/login', methods = ['POST'])
 def login():
     request_data = request.get_json()
             
-    username = request_data['username']
-    password = request_data['password']
+    try:
 
-    user = User.query.filter_by(username = username).first()
+        username = request_data['username']
+        password = request_data['password']
 
-    if user and bcrypt.check_password_hash(user.password, password):
-        # session['logged_in'] = True
-        status = True
+        user = User.query.filter_by(username = username).first()
+
+        if user and bcrypt.check_password_hash(user.password, password):
+
+            auth_token = user.encode_auth_token(user.id)
+
+            response_obj = {
+                'status': 'success',
+                'message': 'Successfully logged in.',
+                'auth_token': auth_token
+            }
+
+            return jsonify(response_obj)
+
+        else:
+            response_obj = {
+                'status': 'fail',
+                'message': 'User does not exist or password is wrong.'
+            }
+
+            return jsonify(response_obj)
+
+    except Exception as e:
+
+        print(e)
+
+        response_obj = {
+            'status': 'fail',
+            'message': 'Try again'
+        }
+
+        return jsonify(response_obj)
+
+@app.route('/api/v1/resources/status', methods = ['GET'])
+def get_status():
+    # get the auth token
+    auth_header = request.headers.get('Authorization')
+    
+    if auth_header:
+        auth_token = auth_header.split(' ')[1]
     else:
-        status = False
+        auth_token = ''
 
-    return jsonify({'response': status})
+    if auth_token:
+
+        # we should get an user id
+        resp = User.decode_auth_token(auth_token)
+
+        if not isinstance(resp, str):
+
+            user = User.query.filter_by(id = resp).first()
+            
+            response_obj = {
+                'status': 'success',
+                'data': {
+                    'user_id': user.id,
+                    'email': user.email
+                    }
+            }
+
+            return jsonify(response_obj)
+
+        response_obj = {
+            'status': 'fail',
+            'message': resp
+        }
+
+        return jsonify(response_obj)
+
+    else:
+
+        response_obj = {
+            'status': 'fail',
+            'message': 'Provide a valid auth token.'
+        }
+            
+        return jsonify(response_obj)
 
 @app.route('/api/v1/resources/symbols', methods = ['GET'])
 def get_symbols():
