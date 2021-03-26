@@ -1,10 +1,12 @@
 # Stock-Analysis-App
 
+This app was built based on an RNN model. It tries basically to predict the stock prices. Also, tweets regarding the selected company are extracted real-time.
+
 Technologies used:
 - Python (Flask)
 - Angular 
 - PostgreSQL
-
+- External APIs such as Tweet API
 
 
 Screenshots from application:
