@@ -1,5 +1,12 @@
 # Stock-Analysis-App
 
+Technologies used:
+- Python (Flask)
+- Angular 
+- PostgreSQL
+
+
+
 Screenshots from application:
 
 Login page:
